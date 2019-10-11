@@ -12,7 +12,7 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final long START_TIME_IN_MILLIS =  6000;
+    private static final long START_TIME_IN_MILLIS =  6000; // Here You can change time that You need to count down.
 
     private TextView mTextViewCounter;
     private Button mButtonStartPause;
