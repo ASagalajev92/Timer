@@ -12,9 +12,9 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final long START_TIME_IN_MILLIS =  6000; // Here You can change time that You need to count down.
+    private static final long START_TIME_IN_MILLIS =  60000; // Here You can change time that You need to count down.
 
-    private TextView mTextViewCounter;
+    private TextView mTextViewCountDown;
     private Button mButtonStartPause;
     private Button mButtonReset;
 
@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mTextViewCounter = findViewById(R.id.text_view_countdown);
+        mTextViewCountDown = findViewById(R.id.text_view_countdown);
 
         mButtonStartPause = findViewById(R.id.button_start_pause);
         mButtonReset = findViewById(R.id.button_reset);
@@ -48,9 +48,7 @@ public class MainActivity extends AppCompatActivity {
         mButtonReset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mTimerRunning) {
                     resetTimer();
-                }
             }
         });
 
@@ -76,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         }.start();
 
         mTimerRunning = true;
-        mButtonStartPause.setText("Pause");
+        mButtonStartPause.setText("pause");
         mButtonReset.setVisibility(View.INVISIBLE);
     }
 
@@ -98,6 +96,6 @@ public class MainActivity extends AppCompatActivity {
 
         String timeLeftFormatted = String.format(Locale.getDefault(),"%02d:%02d", minutes, seconds);
 
-        mTextViewCounter.setText(timeLeftFormatted);
+        mTextViewCountDown.setText(timeLeftFormatted);
     }
 }
