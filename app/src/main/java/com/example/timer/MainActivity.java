@@ -10,9 +10,10 @@ import android.widget.TextView;
 
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity {
 
-    private static final long START_TIME_IN_MILLIS =  60000; // Here You can change time that You need to count down.
+
+public class MainActivity extends AppCompatActivity {
+    private static final long START_TIME_IN_MILLIS = 6000;
 
     private TextView mTextViewCountDown;
     private Button mButtonStartPause;
@@ -36,8 +37,8 @@ public class MainActivity extends AppCompatActivity {
 
         mButtonStartPause.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                if (mTimerRunning){
+            public void onClick(View v) {
+                if (mTimerRunning) {
                     pauseTimer();
                 } else {
                     startTimer();
@@ -47,13 +48,12 @@ public class MainActivity extends AppCompatActivity {
 
         mButtonReset.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                    resetTimer();
+            public void onClick(View v) {
+                resetTimer();
             }
         });
 
         updateCountDownText();
-
     }
 
     private void startTimer() {
@@ -70,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
                 mButtonStartPause.setText("Start");
                 mButtonStartPause.setVisibility(View.INVISIBLE);
                 mButtonReset.setVisibility(View.VISIBLE);
+                mTimeLeftInMillis = 0;
+                updateCountDownText();
             }
         }.start();
 
@@ -84,17 +86,19 @@ public class MainActivity extends AppCompatActivity {
         mButtonStartPause.setText("Start");
         mButtonReset.setVisibility(View.VISIBLE);
     }
+
     private void resetTimer() {
         mTimeLeftInMillis = START_TIME_IN_MILLIS;
         updateCountDownText();
         mButtonReset.setVisibility(View.INVISIBLE);
         mButtonStartPause.setVisibility(View.VISIBLE);
     }
+
     private void updateCountDownText() {
         int minutes = (int) (mTimeLeftInMillis / 1000) / 60;
         int seconds = (int) (mTimeLeftInMillis / 1000) % 60;
 
-        String timeLeftFormatted = String.format(Locale.getDefault(),"%02d:%02d", minutes, seconds);
+        String timeLeftFormatted = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
 
         mTextViewCountDown.setText(timeLeftFormatted);
     }
