@@ -1,8 +1,8 @@
 package com.example.timer;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
@@ -22,7 +22,8 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean mTimerRunning;
 
-    private long mTimeLeftInMillis = START_TIME_IN_MILLIS;
+    private long mTimeLeftInMillis;
+    private long mEndTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,36 +53,32 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        updateCountDownText();
     }
 
     private void startTimer() {
+        mEndTime = System.currentTimeMillis() + mTimeLeftInMillis;
+
         mCountDownTimer = new CountDownTimer(mTimeLeftInMillis, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 mTimeLeftInMillis = millisUntilFinished;
                 updateCountDownText();
-                updateButtons();
             }
 
             @Override
             public void onFinish() {
                 mTimerRunning = false;
-                mButtonStartPause.setText("Start");
-                mTimeLeftInMillis = 0;
-                updateCountDownText();
                 updateButtons();
             }
         }.start();
 
         mTimerRunning = true;
-        mButtonStartPause.setText("pause");
+        updateButtons();
     }
 
     private void pauseTimer() {
         mCountDownTimer.cancel();
         mTimerRunning = false;
-        mButtonStartPause.setText("Start");
         updateButtons();
     }
 
@@ -100,19 +97,19 @@ public class MainActivity extends AppCompatActivity {
         mTextViewCountDown.setText(timeLeftFormatted);
     }
 
-//    Method that updates button appearing
-
     private void updateButtons() {
         if (mTimerRunning) {
-            mButtonStartPause.setText("Pause");
             mButtonReset.setVisibility(View.INVISIBLE);
+            mButtonStartPause.setText("Pause");
         } else {
             mButtonStartPause.setText("Start");
-            if (mTimeLeftInMillis == 0) {
+
+            if (mTimeLeftInMillis < 1000) {
                 mButtonStartPause.setVisibility(View.INVISIBLE);
             } else {
                 mButtonStartPause.setVisibility(View.VISIBLE);
             }
+
             if (mTimeLeftInMillis < START_TIME_IN_MILLIS) {
                 mButtonReset.setVisibility(View.VISIBLE);
             } else {
@@ -121,25 +118,81 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // Fixing life circle bag ( orientation change )
+    // ========   Rotating bag fixing with saveInstanceState =======
 
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
+    /*@Override
+    protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putLong("millisLeft", mTimeLeftInMillis);
-        outState.putBoolean("timerRunning",mTimerRunning);
-    }
+        outState.putBoolean("timerRunning", mTimerRunning);
+        outState.putLong("endTime", mEndTime);
+    }*/
 
-    @Override
-    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+    /*@Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+
         mTimeLeftInMillis = savedInstanceState.getLong("millisLeft");
         mTimerRunning = savedInstanceState.getBoolean("timerRunning");
         updateCountDownText();
         updateButtons();
 
         if (mTimerRunning) {
+            mEndTime = savedInstanceState.getLong("endTime");
+            mTimeLeftInMillis = mEndTime - System.currentTimeMillis();
             startTimer();
         }
+    }*/
+
+
+//   ======== onStop method block =======
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        SharedPreferences prefs = getSharedPreferences("prefs",MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        editor.putLong("millisLeft", mTimeLeftInMillis);
+        editor.putBoolean("isRunning",mTimerRunning);
+        editor.putLong("endTime",mEndTime);
+
+        editor.apply();
+
+        if (mCountDownTimer != null) {
+            mCountDownTimer.cancel();
+        }
     }
+
+
+    //onStart method block
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
+
+        mTimeLeftInMillis = prefs.getLong("millisLeft", START_TIME_IN_MILLIS);
+        mTimerRunning = prefs.getBoolean("isRunning", false);
+
+        updateCountDownText();
+        updateButtons();
+
+        if (mTimerRunning) {
+            mEndTime = prefs.getLong("endTime", 0);
+            mTimeLeftInMillis = mEndTime - System.currentTimeMillis();
+
+            if (mTimeLeftInMillis < 0) {
+                mTimeLeftInMillis = 0;
+                mTimerRunning = false;
+                updateCountDownText();
+                updateButtons();
+            } else {
+                startTimer();
+            }
+        }
+    }
+
 }
