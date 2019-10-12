@@ -1,5 +1,6 @@
 package com.example.timer;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -9,8 +10,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.Locale;
-
-
 
 public class MainActivity extends AppCompatActivity {
     private static final long START_TIME_IN_MILLIS = 6000;
@@ -62,36 +61,34 @@ public class MainActivity extends AppCompatActivity {
             public void onTick(long millisUntilFinished) {
                 mTimeLeftInMillis = millisUntilFinished;
                 updateCountDownText();
+                updateButtons();
             }
 
             @Override
             public void onFinish() {
                 mTimerRunning = false;
                 mButtonStartPause.setText("Start");
-                mButtonStartPause.setVisibility(View.INVISIBLE);
-                mButtonReset.setVisibility(View.VISIBLE);
                 mTimeLeftInMillis = 0;
                 updateCountDownText();
+                updateButtons();
             }
         }.start();
 
         mTimerRunning = true;
         mButtonStartPause.setText("pause");
-        mButtonReset.setVisibility(View.INVISIBLE);
     }
 
     private void pauseTimer() {
         mCountDownTimer.cancel();
         mTimerRunning = false;
         mButtonStartPause.setText("Start");
-        mButtonReset.setVisibility(View.VISIBLE);
+        updateButtons();
     }
 
     private void resetTimer() {
         mTimeLeftInMillis = START_TIME_IN_MILLIS;
         updateCountDownText();
-        mButtonReset.setVisibility(View.INVISIBLE);
-        mButtonStartPause.setVisibility(View.VISIBLE);
+        updateButtons();
     }
 
     private void updateCountDownText() {
@@ -101,5 +98,43 @@ public class MainActivity extends AppCompatActivity {
         String timeLeftFormatted = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
 
         mTextViewCountDown.setText(timeLeftFormatted);
+    }
+
+//    Method that updates button appearing
+
+    private void updateButtons() {
+        if (mTimerRunning) {
+            mButtonStartPause.setText("Pause");
+            mButtonReset.setVisibility(View.INVISIBLE);
+        } else {
+            mButtonStartPause.setText("Start");
+            if (mTimeLeftInMillis == 0) {
+                mButtonStartPause.setVisibility(View.INVISIBLE);
+            } else {
+                mButtonStartPause.setVisibility(View.VISIBLE);
+            }
+            if (mTimeLeftInMillis < START_TIME_IN_MILLIS) {
+                mButtonReset.setVisibility(View.VISIBLE);
+            } else {
+                mButtonReset.setVisibility(View.INVISIBLE);
+            }
+        }
+    }
+
+
+
+    // Fixing life circle bag ( orientation change )
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putLong("millisLeft", mTimeLeftInMillis);
+        outState.putBoolean("timeRunning",mTimerRunning);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
     }
 }
