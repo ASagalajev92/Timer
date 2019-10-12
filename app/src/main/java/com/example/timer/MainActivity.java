@@ -121,20 +121,25 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-
     // Fixing life circle bag ( orientation change )
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putLong("millisLeft", mTimeLeftInMillis);
-        outState.putBoolean("timeRunning",mTimerRunning);
+        outState.putBoolean("timerRunning",mTimerRunning);
     }
 
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+        mTimeLeftInMillis = savedInstanceState.getLong("millisLeft");
+        mTimerRunning = savedInstanceState.getBoolean("timerRunning");
+        updateCountDownText();
+        updateButtons();
 
+        if (mTimerRunning) {
+            startTimer();
+        }
     }
 }

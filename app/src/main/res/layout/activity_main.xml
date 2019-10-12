@@ -8,14 +8,10 @@
 
     <TextView
         android:id="@+id/text_view_countdown"
-        android:layout_width="152dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_marginStart="129dp"
-        android:layout_marginTop="304dp"
-        android:layout_marginEnd="130dp"
-        android:layout_marginBottom="345dp"
         android:text="@string/time_numbers"
         android:textColor="@android:color/black"
         android:textSize="60sp" />
@@ -24,20 +20,20 @@
         android:id="@+id/button_start_pause"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="126dp"
-        android:layout_marginTop="407dp"
+        android:layout_below="@+id/text_view_countdown"
+        android:layout_alignStart="@+id/text_view_countdown"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="12dp"
         android:text="@string/button_start_pause" />
 
     <Button
         android:id="@+id/button_reset"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="215dp"
-        android:layout_marginTop="407dp"
+        android:layout_below="@+id/text_view_countdown"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
+        android:layout_toEndOf="@+id/button_start_pause"
         android:text="@string/button_reset"
         android:visibility="invisible"
         tools:visibility="visible" />
