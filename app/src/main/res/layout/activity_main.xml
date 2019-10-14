@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:layout_marginTop="40dp"
         android:text="@string/time_numbers"
         android:textColor="@android:color/black"
         android:textSize="60sp" />
@@ -39,13 +39,28 @@
         tools:visibility="visible"/>
 
     <EditText
-        android:id="@+id/edit_minutes"
+        android:id="@+id/editText_minutes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/text_view_countdown"
+        android:layout_below="@+id/button_start_pause"
         android:layout_alignStart="@+id/text_view_countdown"
+        android:layout_alignEnd="@+id/button_start_pause"
         android:layout_marginStart="0dp"
-        android:layout_marginBottom="12dp"
-        android:hint="@string/edit_minutes_hint" />
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="0dp"
+        android:hint="@string/edit_minutes_hint"
+        android:inputType="number"
+        android:maxLength="4" />
+
+    <Button
+        android:id="@+id/button_set"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button_reset"
+        android:layout_alignStart="@+id/button_reset"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="12dp"
+        android:text="@string/button_set"/>
+
 
 </RelativeLayout>

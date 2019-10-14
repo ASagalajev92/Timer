@@ -7,21 +7,24 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
-    private static final long START_TIME_IN_MILLIS = 6000;
 
+    private EditText mEditTextMinutes;
     private TextView mTextViewCountDown;
     private Button mButtonStartPause;
+    private Button mButtonSet;
     private Button mButtonReset;
 
     private CountDownTimer mCountDownTimer;
 
     private boolean mTimerRunning;
 
+    private long mStartTimeInMillis;
     private long mTimeLeftInMillis;
     private long mEndTime;
 
@@ -30,10 +33,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mEditTextMinutes = findViewById(R.id.editText_minutes);
         mTextViewCountDown = findViewById(R.id.text_view_countdown);
 
+        mButtonSet = findViewById(R.id.button_set);
         mButtonStartPause = findViewById(R.id.button_start_pause);
         mButtonReset = findViewById(R.id.button_reset);
+
+        mButtonSet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setTime();
+            }
+        });
 
         mButtonStartPause.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void resetTimer() {
-        mTimeLeftInMillis = START_TIME_IN_MILLIS;
+        mTimeLeftInMillis = mStartTimeInMillis;
         updateCountDownText();
         updateButtons();
     }
@@ -112,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
                 mButtonStartPause.setVisibility(View.VISIBLE);
 
             }
-            if (mTimeLeftInMillis < START_TIME_IN_MILLIS) {
+            if (mTimeLeftInMillis < mStartTimeInMillis) {
                 mButtonReset.setVisibility(View.VISIBLE);
             }
             else {
@@ -177,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
 
-        mTimeLeftInMillis = prefs.getLong("millisLeft", START_TIME_IN_MILLIS);
+        mTimeLeftInMillis = prefs.getLong("millisLeft", mStartTimeInMillis);
         mTimerRunning = prefs.getBoolean("isRunning", false);
 
         updateCountDownText();
