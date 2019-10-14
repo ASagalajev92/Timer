@@ -68,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFinish() {
                 mTimerRunning = false;
+                mTimeLeftInMillis = 0;
+                updateCountDownText();
                 updateButtons();
             }
         }.start();
@@ -108,11 +110,12 @@ public class MainActivity extends AppCompatActivity {
                 mButtonStartPause.setVisibility(View.INVISIBLE);
             } else {
                 mButtonStartPause.setVisibility(View.VISIBLE);
-            }
 
+            }
             if (mTimeLeftInMillis < START_TIME_IN_MILLIS) {
                 mButtonReset.setVisibility(View.VISIBLE);
-            } else {
+            }
+            else {
                 mButtonReset.setVisibility(View.INVISIBLE);
             }
         }

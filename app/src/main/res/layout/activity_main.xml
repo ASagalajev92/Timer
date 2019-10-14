@@ -36,6 +36,16 @@
         android:layout_toEndOf="@+id/button_start_pause"
         android:text="@string/button_reset"
         android:visibility="invisible"
-        tools:visibility="visible" />
+        tools:visibility="visible"/>
+
+    <EditText
+        android:id="@+id/edit_minutes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/text_view_countdown"
+        android:layout_alignStart="@+id/text_view_countdown"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="12dp"
+        android:hint="@string/edit_minutes_hint" />
 
 </RelativeLayout>
