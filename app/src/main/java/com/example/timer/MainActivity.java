@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
@@ -16,6 +17,8 @@ import android.widget.Toast;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
+
+    MediaPlayer player;
 
     private EditText mEditTextMinutes;
     private EditText mEditTextSeconds;
@@ -52,18 +55,21 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String input = mEditTextMinutes.getText().toString();
                 if (input.length() == 0) {
-                    Toast.makeText(MainActivity.this, "Field can't be empty !", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this,
+                            "Field can't be empty !", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 long millisInput = Long.parseLong(input) * 60000;
                 if (millisInput == 0) {
-                    Toast.makeText(MainActivity.this, "Please enter positive number !", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this,
+                            "Please enter positive number !", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 setTime(millisInput);
                 //mEditTextMinutes.setText("");
                 closeKeeboard();
+
             }
         });
 
@@ -72,18 +78,21 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String input = mEditTextSeconds.getText().toString();
                 if (input.length() == 0) {
-                    Toast.makeText(MainActivity.this, "Field can't be empty !", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this,
+                            "Field can't be empty !", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 long millisInput = Long.parseLong(input) * 1000;
                 if (millisInput == 0) {
-                    Toast.makeText(MainActivity.this, "Please enter positive number !", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this,
+                            "Please enter positive number !", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 setTime(millisInput);
-                //mEditTextMinutes.setText("");
+                //mEditTextMinutes.setText(""); // if You don't need to save last entered number to fields.
                 closeKeeboard();
+
             }
         });
 
@@ -102,9 +111,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 resetTimer();
+                stopPlayer();
+
             }
         });
 
+    }
+
+    private void stopPlayer() {
+        if (mTimerRunning != true) {
+            player.stop();
+        }
     }
 
     private void setTime(long milliseconds) {
@@ -128,11 +145,16 @@ public class MainActivity extends AppCompatActivity {
                 mTimeLeftInMillis = 0;
                 updateCountDownText();
                 updateButtons();
+                if (player == null) {
+                    player = MediaPlayer.create(MainActivity.this, R.raw.alarm);
+                }
+                player.start();
             }
         }.start();
 
         mTimerRunning = true;
         updateButtons();
+        //player.release();
     }
 
     private void pauseTimer() {
