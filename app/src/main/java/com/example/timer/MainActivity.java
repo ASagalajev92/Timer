@@ -119,8 +119,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void stopPlayer() {
-        if (mTimerRunning != true) {
-            player.stop();
+        if (player != null) {
+            player.release();
+            player = null;
+            Toast.makeText(this, "MediaPlayer released", Toast.LENGTH_SHORT).show();
         }
     }
 
