@@ -261,6 +261,7 @@ public class MainActivity extends AppCompatActivity {
         editor.putLong("endTime",mEndTime);
 
         editor.apply();
+        stopPlayer();
 
         if (mCountDownTimer != null) {
             mCountDownTimer.cancel();

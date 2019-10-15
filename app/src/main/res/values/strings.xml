@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Timer</string>
+    <string name="app_name">CountDown Timer</string>
     <string name="button_reset">RESET</string>
     <string name="button_start_pause">START</string>
     <string name="time_numbers">00:00</string>
